@@ -51,6 +51,15 @@ def glVertex(x, y):
     r.point(* r.convertir_cords(x, y))
 
 
+def glLine(x0, y0, x1, y1):
+    global r
+
+    r.line(
+        * r.convertir_cords(x0, y0),
+        * r.convertir_cords(x1, y1)
+    )
+
+
 def glColor(red, green, blue):
     global r
 

@@ -54,7 +54,7 @@ class Render(object):
         # pixel data
         for x in range(self.height):
             for y in range(self.width):
-                f.write(self.framebuffer[x][y])
+                f.write(self.framebuffer[y][x])
 
         f.close()
 
@@ -76,3 +76,43 @@ class Render(object):
         y_final = int(y_convertida + self.viewport["y"])
 
         return x_final, y_final
+
+    def line(self, x1, y1, x2, y2):
+        """
+        Draws a line in the screen.
+        Input: 
+        start: size 2 array with x,y coordinates
+        end: size 2 array with x,y coordinates
+        """
+        x1, y1 = x1, y1
+        x2, y2 = x2, y2
+
+        dy = abs(y2 - y1)
+        dx = abs(x2 - x1)
+        steep = dy > dx
+
+        if steep:
+            x1, y1 = y1, x1
+            x2, y2 = y2, x2
+
+        if x1 > x2:
+            x1, x2 = x2, x1
+            y1, y2 = y2, y1
+
+        dy = abs(y2 - y1)
+        dx = abs(x2 - x1)
+
+        offset = 0
+        threshold = dx
+
+        y = y1
+        for x in range(x1, x2 + 1):
+            if steep:
+                self.point(y, x)
+            else:
+                self.point(x, y)
+
+            offset += dy * 2
+            if offset >= threshold:
+                y += 1 if y1 < y2 else -1
+                threshold += dx * 2
